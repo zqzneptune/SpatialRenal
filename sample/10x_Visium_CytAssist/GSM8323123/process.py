@@ -1,0 +1,399 @@
+#!/usr/bin/env python
+"""Per-sample ingestion + QC: raw/ -> data/GSM8323123_processed.h5.
+
+For this single sample
+(GSM8323123, bIRI / 2 d, Visium spatial transcriptomics (10x Space Ranger)), parse the original author-distributed files in
+``raw/`` into a standardized, QC-filtered AnnData stored under the unified name
+``data/GSM8323123_processed.h5`` (h5ad-compatible HDF5), plus a matching QC report
+``data/GSM8323123_processed.qc.json``.
+
+Provenance:
+  gsm        : GSM8323123
+  study      : mouse-IRI-repair (GSE269884; Nat Commun s41467-025-62599-9)
+  condition  : bIRI / 2 d
+  species    : Mus musculus
+  modality   : spatial (10x Visium CytAssist)
+  raw files  : GSM8323123_visium_day2_male_spaceranger.tar.gz
+
+Usage:
+    process.py --raw-dir raw --data-dir data --tmp-dir tmp
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as _dt
+import json
+import shutil
+import sys
+import tarfile
+from pathlib import Path
+from typing import Any, Dict, Tuple
+
+import numpy as np
+import pandas as pd
+import scanpy as sc
+import anndata as ad
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.image import imread
+
+
+# --------------------------------------------------------------------------- #
+# Logging
+# --------------------------------------------------------------------------- #
+def log(level: str, msg: str) -> None:
+    ts = _dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{ts}] [{level}] {msg}", flush=True)
+
+
+# --------------------------------------------------------------------------- #
+# Sample metadata & QC parameters
+# --------------------------------------------------------------------------- #
+# Sample metadata
+SAMPLE_META: Dict[str, str] = {
+    'gsm': 'GSM8323123',
+    'sample_id': 'visium_day2',
+    'species': 'Mus musculus',
+    'gse': 'GSE269884',
+    'study': 'mouse-IRI-repair',
+    'modality': 'spatial',
+    'platform': '10x Visium CytAssist',
+    'disease_condition': 'AKI/IRI (bilateral IRI)',
+    'tissue_region': 'whole kidney',
+    'sex': 'male',
+    'age': '8-10 weeks',
+    'treatment': 'NA',
+    'model_genotype': 'C57BL/6J',
+    'patient_individual': 'mouse:2 d',
+    'panel_probes': 'WTS (Visium CytAssist)',
+    'prep': 'FFPE',
+    'reference_genome': 'mm10-2020-A',
+    'condition_detail': 'bIRI',
+    'timepoint': '2 d',
+}
+
+# Quality control parameters
+THRESHOLDS: Dict[str, float] = {
+    "min_counts_per_spot": 500,
+    "min_genes_per_spot": 200,
+    "min_spots_per_gene": 5,
+    "keep_fraction_min": 0.50,
+}
+
+
+# --------------------------------------------------------------------------- #
+# obs table from embedded metadata
+# --------------------------------------------------------------------------- #
+def build_obs(n_units: int) -> pd.DataFrame:
+    """Build the standardized per-spot obs table from the embedded SAMPLE_META."""
+    meta: Dict[str, Any] = dict(SAMPLE_META)
+    for c in ("n_genes", "n_counts", "pct_mito", "qc_pass"):
+        meta[c] = np.nan
+    return pd.DataFrame([meta] * n_units)
+
+
+# --------------------------------------------------------------------------- #
+# Visium staging + reading (Space Ranger)
+# --------------------------------------------------------------------------- #
+def stage_visium(data_dir: Path, gsm: str, tmp_dir: Path) -> Tuple[Path, Path]:
+    """Extract the Space Ranger ``outs/`` subtree for ``gsm`` from its tar.
+
+    Returns ``(matrix_dir, spatial_dir)`` — the ``filtered_feature_bc_matrix``
+    and ``spatial`` folders (tissue images + positions + scalefactors).
+    """
+    tars = [p for p in sorted(data_dir.glob(f"{gsm}*")) if p.suffix == ".gz"]
+    if not tars:
+        log("ERROR", f"no Space Ranger tar for {gsm} under {data_dir}")
+        sys.exit(3)
+    stage = tmp_dir / f"{gsm}_visium"
+    found = False
+    for tar in tars:
+        try:
+            with tarfile.open(tar, "r:*") as tf:
+                members = [
+                    m for m in tf.getmembers()
+                    if m.isfile() and "/outs/" in m.name and (
+                        "filtered_feature_bc_matrix/" in m.name
+                        or m.name.endswith(("tissue_positions_list.csv", "tissue_positions.csv"))
+                        or m.name.endswith(("tissue_hires_image.png", "tissue_lowres_image.png",
+                                            "scalefactors_json.json"))
+                    )
+                ]
+                if not members:
+                    continue
+                for m in members:
+                    tf.extract(m, path=stage, filter="data")
+                found = True
+                log("INFO", f"extracted Visium outs for {gsm} ({len(members)} files)")
+                break
+        except (tarfile.TarError, OSError) as e:
+            log("WARN", f"tar {tar} not readable: {e}")
+    if not found:
+        log("ERROR", f"no outs/ subtree found in tars for {gsm}")
+        sys.exit(3)
+
+    matrix_dir = next(stage.rglob("filtered_feature_bc_matrix"), None)
+    spatial_dir = next(stage.rglob("spatial"), None)
+    if matrix_dir is None or spatial_dir is None:
+        log("ERROR", f"missing filtered_feature_bc_matrix or spatial for {gsm}")
+        sys.exit(3)
+    return matrix_dir, spatial_dir
+
+
+def read_visium(matrix_dir: Path, spatial_dir: Path, species: str, library_id: str) -> ad.AnnData:
+    """Assemble a Visium AnnData from Space Ranger matrix + tissue positions.
+
+    ``adata.uns["spatial"][library_id]`` carries the tissue images and
+    scalefactors so the UMI overlay can be drawn on the H&E section.
+    """
+    adata = sc.read_10x_mtx(str(matrix_dir), var_names="gene_symbols", make_unique=True, gex_only=True)
+
+    pos_files = sorted(spatial_dir.glob("tissue_positions*.csv"))
+    if not pos_files:
+        log("ERROR", f"no tissue_positions*.csv in {spatial_dir}"); sys.exit(3)
+    first = pd.read_csv(pos_files[0], nrows=1)
+    if "barcode" in first.columns:
+        pos = pd.read_csv(pos_files[0])
+    else:  # old no-header format (tissue_positions_list.csv)
+        names = ["barcode", "in_tissue", "array_row", "array_col",
+                 "pxl_col_in_fullres", "pxl_row_in_fullres"]
+        ncols = len(pd.read_csv(pos_files[0], header=None, nrows=1).columns)
+        pos = pd.read_csv(pos_files[0], header=None, names=names[:ncols])
+
+    pos = pos.set_index("barcode").reindex(adata.obs_names)
+    for c in ("in_tissue", "array_row", "array_col"):
+        if c in pos.columns:
+            adata.obs[c] = pos[c].values
+    if "pxl_col_in_fullres" in pos.columns and "pxl_row_in_fullres" in pos.columns:
+        adata.obsm["spatial"] = pos[["pxl_col_in_fullres", "pxl_row_in_fullres"]].values.astype(float)
+
+    images: Dict[str, np.ndarray] = {}
+    for key, fname in (("hires", "tissue_hires_image.png"), ("lowres", "tissue_lowres_image.png")):
+        f = spatial_dir / fname
+        if f.exists():
+            images[key] = imread(f)
+    scalefactors: Dict[str, Any] = {}
+    sf = spatial_dir / "scalefactors_json.json"
+    if sf.exists():
+        scalefactors = json.load(open(sf))
+    adata.uns["spatial"] = {library_id: {"images": images, "scalefactors": scalefactors}}
+
+    adata.var["feature_type"] = "Gene Expression"
+    adata.var["genome"] = "hg38" if species == "Homo sapiens" else "mm10"
+    return adata
+
+
+# --------------------------------------------------------------------------- #
+# QC
+# --------------------------------------------------------------------------- #
+MITO_PATTERNS = {"Homo sapiens": r"^MT-", "Mus musculus": r"^mt-"}
+
+
+def compute_spot_qc(adata: ad.AnnData, mito_pat: str) -> ad.AnnData:
+    """Add n_genes / n_counts / pct_mito to obs (raw counts required)."""
+    mito = adata.var_names.str.contains(mito_pat, regex=True, na=False)
+    adata.obs["n_genes"] = np.asarray((adata.X > 0).sum(axis=1)).ravel()
+    adata.obs["n_counts"] = np.asarray(adata.X.sum(axis=1)).ravel()
+    if mito.any():
+        mito_counts = np.asarray(adata[:, mito].X.sum(axis=1)).ravel()
+        adata.obs["pct_mito"] = 100.0 * mito_counts / np.maximum(adata.obs["n_counts"].values, 1)
+    else:
+        adata.obs["pct_mito"] = 0.0
+    return adata
+
+
+def run_qc(adata: ad.AnnData, species: str, thr: Dict[str, Any]) -> Tuple[Dict[str, Any], ad.AnnData]:
+    """Filter spots/genes with Visium thresholds; return (metrics, filtered_adata)."""
+    pre_cells = adata.n_obs
+    pre_genes = adata.n_vars
+
+    compute_spot_qc(adata, MITO_PATTERNS.get(species, r"^MT-"))
+
+    mask = pd.Series(True, index=adata.obs_names)
+    if "min_genes_per_spot" in thr:
+        mask &= adata.obs["n_genes"] >= thr["min_genes_per_spot"]
+    if "min_counts_per_spot" in thr:
+        mask &= adata.obs["n_counts"] >= thr["min_counts_per_spot"]
+    if "max_pct_mito" in thr:
+        mask &= adata.obs["pct_mito"] <= thr["max_pct_mito"]
+
+    adata.obs["qc_pass"] = mask.values
+    n_pass = int(mask.sum())
+    keep_frac = n_pass / max(pre_cells, 1)
+
+    clean = adata[mask].copy()
+    min_cells = thr.get("min_cells_per_gene", thr.get("min_spots_per_gene", 0))
+    if min_cells:
+        clean.var["n_cells"] = np.asarray((clean.X > 0).sum(axis=0)).ravel()
+        clean = clean[:, clean.var["n_cells"] >= min_cells].copy()
+
+    post_cells = clean.n_obs
+    post_genes = clean.n_vars
+    warn = keep_frac < thr.get("keep_fraction_min", 0.0)
+
+    metrics = {
+        "gsm": None, "assay": "Visium", "species": species,
+        "pre_cells": pre_cells, "pre_genes": pre_genes,
+        "post_cells": post_cells, "post_genes": post_genes,
+        "keep_fraction": round(keep_frac, 4),
+        "median_genes_per_unit": float(np.median(clean.obs["n_genes"])) if post_cells else np.nan,
+        "median_counts_per_unit": float(np.median(clean.obs["n_counts"])) if post_cells else np.nan,
+        "median_pct_mito": float(np.median(clean.obs["pct_mito"])) if post_cells else np.nan,
+        "qc_pass": not warn,
+        "qc_note": (f"pre {pre_cells} spots / {pre_genes} genes -> post {post_cells} spots / "
+                    f"{post_genes} genes (kept {keep_frac:.1%})"
+                    + ("; WARN low retained fraction" if warn else "")),
+    }
+    return metrics, clean
+
+
+# --------------------------------------------------------------------------- #
+# Outputs: QC text report + UMI overlay figure
+# --------------------------------------------------------------------------- #
+def fmt(x: Any) -> str:
+    try:
+        return f"{float(x):.2f}" if np.isfinite(float(x)) else "n/a"
+    except (TypeError, ValueError):
+        return str(x)
+
+
+def write_qc_report(gsm: str, metrics: Dict[str, Any], thr: Dict[str, Any],
+                    raw_files: "list[str]", out_txt: Path) -> None:
+    """Write a human-readable QC report (data/GSMxxxxx_qc_report.txt)."""
+    meta = SAMPLE_META
+    bar = "=" * 78
+    lines = [
+        bar,
+        f"  QC REPORT — {gsm}",
+        bar,
+        f"  Study             : {meta.get('study', 'NA')} ({meta.get('gse', 'NA')})",
+        f"  Condition         : {meta.get('condition_detail', 'NA')} / {meta.get('timepoint', 'NA')}",
+        f"  Species           : {meta.get('species', 'NA')}",
+        f"  Assay / Platform  : {metrics['assay']} / {meta.get('platform', 'NA')}",
+        f"  Source (raw/)     : {', '.join(raw_files) or 'NA'}",
+        "",
+        "  --- Pre-QC ---",
+        f"  units             : {metrics['pre_cells']}",
+        f"  genes             : {metrics['pre_genes']}",
+        "",
+        "  --- Post-QC (filtered) ---",
+        f"  units             : {metrics['post_cells']}   (kept {metrics['keep_fraction']:.1%})",
+        f"  genes             : {metrics['post_genes']}",
+        f"  median genes/unit : {fmt(metrics['median_genes_per_unit'])}",
+        f"  median counts/unit: {fmt(metrics['median_counts_per_unit'])}",
+        f"  median % mito     : {fmt(metrics['median_pct_mito'])}",
+        "",
+        "  --- Thresholds applied ---",
+    ]
+    lines += [f"  {k:<24}: {v}" for k, v in thr.items()]
+    lines += [
+        "",
+        f"  QC result         : {'PASS' if metrics['qc_pass'] else 'WARN'}",
+        f"  Note              : {metrics['qc_note']}",
+        "",
+        f"  Outputs : data/{gsm}_processed.h5 · data/{gsm}_processed.qc.json · data/{gsm}_umi_counts.png",
+        f"  Raw counts (pre-QC) : raw/{gsm}_raw_counts.h5",
+        f"  Generated : {_dt.datetime.now().isoformat()}  (process.py)",
+        bar,
+    ]
+    out_txt.write_text("\n".join(lines) + "\n")
+    log("INFO", f"wrote {out_txt}")
+
+
+def plot_umi_overlay(adata: ad.AnnData, gsm: str, out_png: Path, library_id: str) -> None:
+    """UMI counts per spot overlaid on the H&E tissue image."""
+    sp = adata.uns.get("spatial", {}).get(library_id, {})
+    scalef = sp.get("scalefactors", {})
+    try:
+        spot = float(scalef.get("spot_diameter_fullres", 1.0) * scalef.get("tissue_hires_scalef", 1.0))
+    except (TypeError, ValueError):
+        spot = 1.0
+    fig, ax = plt.subplots(1, 1, figsize=(9, 9))
+    sc.pl.spatial(adata, color="n_counts", img_key="hires", spot_size=spot,
+                  title=f"{gsm} — UMI counts per spot", ax=ax, show=False, color_map="magma")
+    fig.savefig(str(out_png), dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    log("INFO", f"wrote {out_png}")
+
+
+# --------------------------------------------------------------------------- #
+# Main
+# --------------------------------------------------------------------------- #
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--gsm", default=SAMPLE_META["gsm"], help="GEO sample accession (defaults to SAMPLE_META)")
+    p.add_argument("--raw-dir", default="raw", help="read-only original files (Space Ranger tar)")
+    p.add_argument("--raw-out", default="raw", help="output directory for pre-QC counts file")
+    p.add_argument("--data-dir", default="data", help="output dir for processed.h5 / qc.* / umi figure")
+    p.add_argument("--tmp-dir", default="tmp", help="temporary working directory")
+    return p.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    gsm = SAMPLE_META["gsm"]
+    log("INFO", f"process start for {gsm} (Visium)")
+
+    raw_dir = Path(args.raw_dir)
+    raw_out = Path(args.raw_out)
+    data_dir = Path(args.data_dir)
+    tmp_dir = Path(args.tmp_dir)
+    raw_out.mkdir(parents=True, exist_ok=True)
+    data_dir.mkdir(parents=True, exist_ok=True)
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+
+    raw_files = [p.name for p in raw_dir.iterdir()
+                 if p.is_file() and not p.name.endswith("_raw_counts.h5")]
+    matrix_dir, spatial_dir = stage_visium(raw_dir, gsm, tmp_dir)
+    adata = read_visium(matrix_dir, spatial_dir, SAMPLE_META.get("species", "NA"), library_id=gsm)
+
+    # 1) Pre-QC raw counts export -> raw/ (counts + coordinates only; no tissue images)
+    raw_counts_adata = adata.copy()
+    raw_counts_adata.uns.pop("spatial", None)
+    raw_counts_adata.write_h5ad(str(raw_out / f"{gsm}_raw_counts.h5"))
+    log("INFO", f"wrote raw counts (pre-QC) {raw_out / f'{gsm}_raw_counts.h5'} ({raw_counts_adata.n_obs} x {raw_counts_adata.n_vars})")
+
+    # 2) QC
+    species = SAMPLE_META.get("species", "NA")
+    metrics, clean = run_qc(adata, species, THRESHOLDS)
+
+    # 3) standardized obs
+    meta_obs = build_obs(clean.n_obs)
+    for c in ("n_genes", "n_counts", "pct_mito"):
+        meta_obs[c] = clean.obs[c].values if c in clean.obs else np.nan
+    meta_obs["qc_pass"] = clean.obs["qc_pass"].values
+    for c in clean.obs.columns:
+        if c not in meta_obs.columns:
+            meta_obs[c] = clean.obs[c].values
+    clean.obs = meta_obs
+    clean.obs_names_make_unique()
+    clean.uns["gsm"] = gsm
+    clean.uns["qc"] = metrics
+    clean.uns["processing"] = {
+        "script": "process.py (visium variant)",
+        "thresholds": THRESHOLDS,
+        "metadata_source": "SAMPLE_META",
+        "timestamp": _dt.datetime.now().isoformat(),
+    }
+
+    # 4) outputs
+    out_h5 = data_dir / f"{gsm}_processed.h5"
+    clean.write_h5ad(str(out_h5))
+    log("INFO", f"wrote {out_h5} ({clean.n_obs} x {clean.n_vars})")
+
+    metrics["gsm"] = gsm
+    out_qc = data_dir / f"{gsm}_processed.qc.json"
+    with open(out_qc, "w") as f:
+        json.dump(metrics, f, indent=2)
+    log("INFO", f"wrote {out_qc}")
+
+    write_qc_report(gsm, metrics, THRESHOLDS, raw_files, data_dir / f"{gsm}_qc_report.txt")
+    plot_umi_overlay(clean, gsm, data_dir / f"{gsm}_umi_counts.png", library_id=gsm)
+
+    log("INFO", f"process done for {gsm}: {metrics['qc_note']}")
+
+
+if __name__ == "__main__":
+    main()

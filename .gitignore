@@ -1,0 +1,44 @@
+*.h5
+*.h5ad
+*.hdf5
+*.rds
+*.zarr/
+*.tar
+*.tar.gz
+*.gz
+*.dcc
+*.pkc
+*.tiff
+*.tif
+*.cloupe
+*.parquet
+*.png
+*.jpg
+*.jpeg
+
+# Directories containing raw or computed data
+raw/
+data/
+tmp/
+temp/
+scratch/
+_output/
+.ipynb_checkpoints/
+
+# Python cache & environments
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# OS / Editor artifacts
+.DS_Store
+.vscode/
+.idea/
