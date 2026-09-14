@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![Scanpy](https://img.shields.io/badge/Scanpy-v1.10+-brightgreen.svg)](https://scanpy.readthedocs.io/)
-[![Spatial Omics](https://img.shields.io/badge/Spatial%20Omics-128%20Samples-orange.svg)]()
+[![Spatial Omics](https://img.shields.io/badge/Spatial%20Omics-132%20Samples-orange.svg)]()
 
 ---
 
@@ -22,7 +22,7 @@
   - [4.1 10x Genomics Visium (39 Samples)](#41-10x-genomics-visium-39-samples)
   - [4.2 10x Genomics Visium CytAssist (14 Samples)](#42-10x-genomics-visium-cytassist-14-samples)
   - [4.3 10x Genomics Visium HD (5 Samples)](#43-10x-genomics-visium-hd-5-samples)
-  - [4.4 10x Genomics Xenium in situ (19 Samples)](#44-10x-genomics-xenium-in-situ-19-samples)
+  - [4.4 10x Genomics Xenium in situ (23 Samples)](#44-10x-genomics-xenium-in-situ-23-samples)
   - [4.5 NanoString CosMx SMI (3 Samples)](#45-nanostring-cosmx-smi-3-samples)
   - [4.6 NanoString GeoMx DSP (48 Samples)](#46-nanostring-geomx-dsp-48-samples)
 - [5. Platform Summary](#5-platform-summary)
@@ -35,12 +35,12 @@
 
 **SpatialRenal** is a curated repository hosting reproducible, per-sample preprocessing and quality control (QC) Python scripts for published kidney spatial transcriptomics datasets.
 
-- **128 Spatial Samples**: Covering **15 studies** across human and mouse kidney models.
+- **132 Spatial Samples**: Covering **16 studies** across human and mouse kidney models.
 - **6 Spatial Platforms Supported**:
   - **10x Genomics Visium** (39 samples)
   - **10x Genomics Visium CytAssist** (14 samples)
   - **10x Genomics Visium HD** (5 samples)
-  - **10x Genomics Xenium in situ** (19 samples)
+  - **10x Genomics Xenium in situ** (23 samples)
   - **NanoString CosMx SMI** (3 samples)
   - **NanoString GeoMx DSP** (48 samples)
 - **Code & Metadata Only**: To ensure lightweight versioning and open access, this repository contains **only Python processing scripts and provenance documentation** — no compiled files, binary datasets, or raw sequencing archives are stored directly in this repository.
@@ -223,7 +223,7 @@ SpatialRenal/
 | [GSM9467252](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9467252) | patient9 | *Homo sapiens* | DKD-HIF-SGLT2i ([GSE317226](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE317226)) | DKD (T2D) (type-2 diabetes, pre-SGLT2i) | [`GSM9467252`](sample/10x_Visium_HD/GSM9467252/) |
 | [GSM9802211](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9802211) | CAMR-ZLD_Spatial | *Homo sapiens* | CAMR-scRNA-VisiumHD ([GSE334924](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE334924)) | transplant-CAMR (chronic AMR graft biopsy) | [`GSM9802211`](sample/10x_Visium_HD/GSM9802211/) |
 
-### 4.4 10x Genomics Xenium in situ (19 Samples)
+### 4.4 10x Genomics Xenium in situ (23 Samples)
 
 | GSM Accession | Sample ID | Species | Study / Series | Disease Condition / Context | Pipeline Link |
 |---|---|---|---|---|---|
@@ -246,6 +246,10 @@ SpatialRenal/
 | [GSM8691123](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8691123) | B6→BALB/c allo 2 (Xenium) | *Mus musculus* | kidney-transplant-rejection ([GSE284742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE284742)) | transplant (syn/allo, mouse) (allogeneic, C57BL/6→BALB/c) | [`GSM8691123`](sample/10x_Xenium_in_situ/GSM8691123/) |
 | [GSM8691124](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8691124) | B6→BALB/c allo (Xenium) | *Mus musculus* | kidney-transplant-rejection ([GSE284742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE284742)) | transplant (syn/allo, mouse) (allogeneic, C57BL/6→BALB/c) | [`GSM8691124`](sample/10x_Xenium_in_situ/GSM8691124/) |
 | [GSM8691125](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8691125) | B6→BALB/c allo 3 (Xenium) | *Mus musculus* | kidney-transplant-rejection ([GSE284742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE284742)) | transplant (syn/allo, mouse) (allogeneic, C57BL/6→BALB/c) | [`GSM8691125`](sample/10x_Xenium_in_situ/GSM8691125/) |
+| [GSM8717006](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8717006) | 20210907-NMK92M | *Mus musculus* | kidney-aging-xenium ([GSE286051](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286051)) | normal (aging) (normal kidney, 92 weeks, male) | [`GSM8717006`](sample/10x_Xenium_in_situ/GSM8717006/) |
+| [GSM8717007](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8717007) | 20210908-NMK92F | *Mus musculus* | kidney-aging-xenium ([GSE286051](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286051)) | normal (aging) (normal kidney, 92 weeks, female) | [`GSM8717007`](sample/10x_Xenium_in_situ/GSM8717007/) |
+| [GSM8717008](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8717008) | 20240208-NMK12F2 | *Mus musculus* | kidney-aging-xenium ([GSE286051](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286051)) | normal (aging) (normal kidney, 12 weeks, female) | [`GSM8717008`](sample/10x_Xenium_in_situ/GSM8717008/) |
+| [GSM8717009](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8717009) | 20240208-NMK12M2 | *Mus musculus* | kidney-aging-xenium ([GSE286051](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286051)) | normal (aging) (normal kidney, 12 weeks, male) | [`GSM8717009`](sample/10x_Xenium_in_situ/GSM8717009/) |
 
 ### 4.5 NanoString CosMx SMI (3 Samples)
 
@@ -317,7 +321,7 @@ SpatialRenal/
 | **10x Visium** | 39 | Space Ranger tarball / MTX + spatial files | `obs` (spots), `obsm['spatial']`, `X` (counts) |
 | **10x Visium CytAssist** | 14 | Space Ranger tarball / MTX + images | `obs` (spots), `obsm['spatial']`, `X` (counts) |
 | **10x Visium HD** | 5 | 8µm bin matrices + tissue coordinates / cell segmentation | `obs` (bins/cells), `obsm['spatial']`, `X` (counts) |
-| **10x Xenium in situ** | 19 | Output bundle / transcripts.zarr / cell boundaries | `obs` (cells), `obsm['spatial']`, `X` (counts) |
+| **10x Xenium in situ** | 23 | Output bundle / transcripts.zarr / flat mtx + cells.csv / cell boundaries | `obs` (cells), `obsm['spatial']`, `X` (counts) |
 | **NanoString CosMx SMI** | 3 | AtoMx h5ad / raw transcripts & cell matrices | `obs` (cells), `obsm['spatial']`, `X` (counts) |
 | **NanoString GeoMx DSP** | 48 | DCC count files + PKC probe annotation | `obs` (ROIs/segments), `obsm['spatial']`, `X` (counts) |
 
