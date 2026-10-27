@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![Scanpy](https://img.shields.io/badge/Scanpy-v1.10+-brightgreen.svg)](https://scanpy.readthedocs.io/)
-[![Spatial Omics](https://img.shields.io/badge/Spatial%20Omics-132%20Samples-orange.svg)]()
+[![Spatial Omics](https://img.shields.io/badge/Spatial%20Omics-197%20Samples-orange.svg)]()
 
 ---
 
@@ -19,10 +19,10 @@
 - [3. Repository Architecture & Usage](#3-repository-architecture--usage)
   - [How to Process a Sample](#how-to-process-a-sample)
 - [4. Sample Catalog](#4-sample-catalog)
-  - [4.1 10x Genomics Visium (39 Samples)](#41-10x-genomics-visium-39-samples)
+  - [4.1 10x Genomics Visium (64 Samples)](#41-10x-genomics-visium-64-samples)
   - [4.2 10x Genomics Visium CytAssist (14 Samples)](#42-10x-genomics-visium-cytassist-14-samples)
-  - [4.3 10x Genomics Visium HD (5 Samples)](#43-10x-genomics-visium-hd-5-samples)
-  - [4.4 10x Genomics Xenium in situ (23 Samples)](#44-10x-genomics-xenium-in-situ-23-samples)
+  - [4.3 10x Genomics Visium HD (12 Samples)](#43-10x-genomics-visium-hd-12-samples)
+  - [4.4 10x Genomics Xenium in situ (56 Samples)](#44-10x-genomics-xenium-in-situ-56-samples)
   - [4.5 NanoString CosMx SMI (3 Samples)](#45-nanostring-cosmx-smi-3-samples)
   - [4.6 NanoString GeoMx DSP (48 Samples)](#46-nanostring-geomx-dsp-48-samples)
 - [5. Platform Summary](#5-platform-summary)
@@ -35,12 +35,12 @@
 
 **SpatialRenal** is a curated repository hosting reproducible, per-sample preprocessing and quality control (QC) Python scripts for published kidney spatial transcriptomics datasets.
 
-- **132 Spatial Samples**: Covering **16 studies** across human and mouse kidney models.
+- **197 Spatial Samples**: Covering **27 studies** across human and mouse kidney models.
 - **6 Spatial Platforms Supported**:
-  - **10x Genomics Visium** (39 samples)
+  - **10x Genomics Visium** (64 samples)
   - **10x Genomics Visium CytAssist** (14 samples)
-  - **10x Genomics Visium HD** (5 samples)
-  - **10x Genomics Xenium in situ** (23 samples)
+  - **10x Genomics Visium HD** (12 samples)
+  - **10x Genomics Xenium in situ** (56 samples)
   - **NanoString CosMx SMI** (3 samples)
   - **NanoString GeoMx DSP** (48 samples)
 - **Code & Metadata Only**: To ensure lightweight versioning and open access, this repository contains **only Python processing scripts and provenance documentation** — no compiled files, binary datasets, or raw sequencing archives are stored directly in this repository.
@@ -150,7 +150,7 @@ SpatialRenal/
 
 ## 4. Sample Catalog
 
-### 4.1 10x Genomics Visium (39 Samples)
+### 4.1 10x Genomics Visium (64 Samples)
 
 | GSM Accession | Sample ID | Species | Study / Series | Disease Condition / Context | Pipeline Link |
 |---|---|---|---|---|---|
@@ -193,6 +193,31 @@ SpatialRenal/
 | [GSM9579056](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9579056) | NZB/WF1 30w rep2 | *Mus musculus* | lupus-nephritis-mouse ([GSE322686](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE322686)) | lupus nephritis (lupus nephritis, NZB/WF1 F1 female, 30 weeks) | [`GSM9579056`](sample/10x_Visium/GSM9579056/) |
 | [GSM9579057](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9579057) | NZB/WF1 30w rep3 | *Mus musculus* | lupus-nephritis-mouse ([GSE322686](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE322686)) | lupus nephritis (lupus nephritis, NZB/WF1 F1 female, 30 weeks) | [`GSM9579057`](sample/10x_Visium/GSM9579057/) |
 | [GSM9579058](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9579058) | NZB/WF1 30w rep4 | *Mus musculus* | lupus-nephritis-mouse ([GSE322686](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE322686)) | lupus nephritis (lupus nephritis, NZB/WF1 F1 female, 30 weeks) | [`GSM9579058`](sample/10x_Visium/GSM9579058/) |
+| [GSM9566413](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9566413) | Kidney_Control | *Mus musculus* | kidney-alcohol-injury ([GSE323994](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE323994)) | control (Control (liquid diet)) | [`GSM9566413`](sample/10x_Visium/GSM9566413/) |
+| [GSM9566414](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9566414) | Kidney_Ethanol | *Mus musculus* | kidney-alcohol-injury ([GSE323994](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE323994)) | alcohol-induced injury (Ethanol (liquid diet)) | [`GSM9566414`](sample/10x_Visium/GSM9566414/) |
+| [GSM9566415](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9566415) | Kidney_Control_CCl4 | *Mus musculus* | kidney-alcohol-injury ([GSE323994](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE323994)) | CCl4 injury (Control diet + CCl4) | [`GSM9566415`](sample/10x_Visium/GSM9566415/) |
+| [GSM9566416](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9566416) | Kidney_Ethanol_CCl4 | *Mus musculus* | kidney-alcohol-injury ([GSE323994](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE323994)) | alcohol and CCl4 injury (Ethanol diet + CCl4) | [`GSM9566416`](sample/10x_Visium/GSM9566416/) |
+| [GSM7115963](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM7115963) | D1_kidney_AKI | *Homo sapiens* | human-cortical-AKI ([GSE228169](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE228169)) | acute kidney injury (acute kidney injury; day 1) | [`GSM7115963`](sample/10x_Visium/GSM7115963/) |
+| [GSM7115964](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM7115964) | D15_kidney_AKI | *Homo sapiens* | human-cortical-AKI ([GSE228169](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE228169)) | acute kidney injury (acute kidney injury; day 15) | [`GSM7115964`](sample/10x_Visium/GSM7115964/) |
+| [GSM8440997](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8440997) | Sham_No13 | *Mus musculus* | mouse-DDR1-fibrosis ([GSE273978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273978)) | sham control (Sham (vehicle)) | [`GSM8440997`](sample/10x_Visium/GSM8440997/) |
+| [GSM8440998](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8440998) | UUO_Vehicle_No18 | *Mus musculus* | mouse-DDR1-fibrosis ([GSE273978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273978)) | UUO fibrosis (UUO (vehicle)) | [`GSM8440998`](sample/10x_Visium/GSM8440998/) |
+| [GSM8440999](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8440999) | UUO_CH6824025_No22 | *Mus musculus* | mouse-DDR1-fibrosis ([GSE273978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273978)) | UUO fibrosis + DDR1 inhibitor (UUO (CH6824025)) | [`GSM8440999`](sample/10x_Visium/GSM8440999/) |
+| [GSM8441000](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8441000) | UUO_CH6824025_No24 | *Mus musculus* | mouse-DDR1-fibrosis ([GSE273978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273978)) | UUO fibrosis + DDR1 inhibitor (UUO (CH6824025)) | [`GSM8441000`](sample/10x_Visium/GSM8441000/) |
+| [GSM8441001](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8441001) | UUO_Vehicle_No16 | *Mus musculus* | mouse-DDR1-fibrosis ([GSE273978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273978)) | UUO fibrosis (UUO (vehicle)) | [`GSM8441001`](sample/10x_Visium/GSM8441001/) |
+| [GSM8441002](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8441002) | UUO_Vehicle_No19 | *Mus musculus* | mouse-DDR1-fibrosis ([GSE273978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273978)) | UUO fibrosis (UUO (vehicle)) | [`GSM8441002`](sample/10x_Visium/GSM8441002/) |
+| [GSM8441003](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8441003) | UUO_CH6824025_No21 | *Mus musculus* | mouse-DDR1-fibrosis ([GSE273978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273978)) | UUO fibrosis + DDR1 inhibitor (UUO (CH6824025)) | [`GSM8441003`](sample/10x_Visium/GSM8441003/) |
+| [GSM8441004](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8441004) | UUO_CH6824025_No23 | *Mus musculus* | mouse-DDR1-fibrosis ([GSE273978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273978)) | UUO fibrosis + DDR1 inhibitor (UUO (CH6824025)) | [`GSM8441004`](sample/10x_Visium/GSM8441004/) |
+| [GSM9034732](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9034732) | EHU_W2 | *Homo sapiens* | human-TSC-angiomyolipoma ([GSE299165](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE299165)) | kidney cancer control (kidney tumor adjacent control) | [`GSM9034732`](sample/10x_Visium/GSM9034732/) |
+| [GSM9034733](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9034733) | Sporadic_AML | *Homo sapiens* | human-TSC-angiomyolipoma ([GSE299165](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE299165)) | sporadic angiomyolipoma (sporadic angiomyolipoma) | [`GSM9034733`](sample/10x_Visium/GSM9034733/) |
+| [GSM9034734](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9034734) | TSC_AML | *Homo sapiens* | human-TSC-angiomyolipoma ([GSE299165](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE299165)) | TSC-associated angiomyolipoma (tuberous sclerosis complex angiomyolipoma) | [`GSM9034734`](sample/10x_Visium/GSM9034734/) |
+| [GSM9580200](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9580200) | ove26_36w | *Mus musculus* | mouse-DKD-TREM2 ([GSE324612](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE324612)) | diabetic kidney disease (OVE26 diabetic kidney disease; 36 weeks) | [`GSM9580200`](sample/10x_Visium/GSM9580200/) |
+| [GSM9580201](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9580201) | ove26_7w | *Mus musculus* | mouse-DKD-TREM2 ([GSE324612](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE324612)) | diabetic kidney disease (OVE26 diabetic kidney disease; 7 weeks) | [`GSM9580201`](sample/10x_Visium/GSM9580201/) |
+| [GSM9580202](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9580202) | ove26_19w | *Mus musculus* | mouse-DKD-TREM2 ([GSE324612](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE324612)) | diabetic kidney disease (OVE26 diabetic kidney disease; 19 weeks) | [`GSM9580202`](sample/10x_Visium/GSM9580202/) |
+| [GSM9580203](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9580203) | wt_control | *Mus musculus* | mouse-DKD-TREM2 ([GSE324612](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE324612)) | healthy control (wild-type control) | [`GSM9580203`](sample/10x_Visium/GSM9580203/) |
+| [GSM9767741](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9767741) | P1_LN | *Homo sapiens* | human-LN-spatial ([GSE333529](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE333529)) | lupus nephritis (lupus nephritis renal biopsy) | [`GSM9767741`](sample/10x_Visium/GSM9767741/) |
+| [GSM9767742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9767742) | P2_LN | *Homo sapiens* | human-LN-spatial ([GSE333529](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE333529)) | lupus nephritis (lupus nephritis renal biopsy) | [`GSM9767742`](sample/10x_Visium/GSM9767742/) |
+| [GSM9767743](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9767743) | P3_LN | *Homo sapiens* | human-LN-spatial ([GSE333529](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE333529)) | lupus nephritis (lupus nephritis renal biopsy) | [`GSM9767743`](sample/10x_Visium/GSM9767743/) |
+| [GSM9767744](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9767744) | P4_LN | *Homo sapiens* | human-LN-spatial ([GSE333529](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE333529)) | lupus nephritis (lupus nephritis renal biopsy) | [`GSM9767744`](sample/10x_Visium/GSM9767744/) |
 
 ### 4.2 10x Genomics Visium CytAssist (14 Samples)
 
@@ -213,7 +238,7 @@ SpatialRenal/
 | [GSM9895922](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9895922) | LS (late stable) | *Homo sapiens* | hypertensive-nephropathy ([GSE339455](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE339455)) | hypertensive nephropathy (LS) (hypertensive nephropathy, LS) | [`GSM9895922`](sample/10x_Visium_CytAssist/GSM9895922/) |
 | [GSM9895923](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9895923) | LP (late progressor) | *Homo sapiens* | hypertensive-nephropathy ([GSE339455](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE339455)) | hypertensive nephropathy (LP) (hypertensive nephropathy, LP) | [`GSM9895923`](sample/10x_Visium_CytAssist/GSM9895923/) |
 
-### 4.3 10x Genomics Visium HD (5 Samples)
+### 4.3 10x Genomics Visium HD (12 Samples)
 
 | GSM Accession | Sample ID | Species | Study / Series | Disease Condition / Context | Pipeline Link |
 |---|---|---|---|---|---|
@@ -222,8 +247,15 @@ SpatialRenal/
 | [GSM9467251](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9467251) | patient7 | *Homo sapiens* | DKD-HIF-SGLT2i ([GSE317226](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE317226)) | DKD (T2D) (type-2 diabetes, pre-SGLT2i) | [`GSM9467251`](sample/10x_Visium_HD/GSM9467251/) |
 | [GSM9467252](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9467252) | patient9 | *Homo sapiens* | DKD-HIF-SGLT2i ([GSE317226](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE317226)) | DKD (T2D) (type-2 diabetes, pre-SGLT2i) | [`GSM9467252`](sample/10x_Visium_HD/GSM9467252/) |
 | [GSM9802211](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9802211) | CAMR-ZLD_Spatial | *Homo sapiens* | CAMR-scRNA-VisiumHD ([GSE334924](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE334924)) | transplant-CAMR (chronic AMR graft biopsy) | [`GSM9802211`](sample/10x_Visium_HD/GSM9802211/) |
+| [GSM9071194](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9071194) | Patient1_SSNS | *Homo sapiens* | human-nephrotic-visiumhd ([GSE300895](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE300895)) | steroid-sensitive nephrotic syndrome (steroid-sensitive nephrotic syndrome (SSNS)) | [`GSM9071194`](sample/10x_Visium_HD/GSM9071194/) |
+| [GSM9071195](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9071195) | Patient2_FSGS | *Homo sapiens* | human-nephrotic-visiumhd ([GSE300895](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE300895)) | focal segmental glomerulosclerosis (focal segmental glomerulosclerosis (FSGS)) | [`GSM9071195`](sample/10x_Visium_HD/GSM9071195/) |
+| [GSM9071196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9071196) | Patient3_FR_SDNS | *Homo sapiens* | human-nephrotic-visiumhd ([GSE300895](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE300895)) | frequently relapsing nephrotic syndrome (frequently relapsing/steroid-dependent nephrotic syndrome (FR/SDNS)) | [`GSM9071196`](sample/10x_Visium_HD/GSM9071196/) |
+| [GSM10122934](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM10122934) | mouse_47822-7_ctrl | *Mus musculus* | mouse-lithium-polyuria ([GSE350835](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE350835)) | reference/normal (wild type mouse kidney control) | [`GSM10122934`](sample/10x_Visium_HD/GSM10122934/) |
+| [GSM10122935](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM10122935) | mouse_47822-8_ctrl | *Mus musculus* | mouse-lithium-polyuria ([GSE350835](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE350835)) | reference/normal (wild type mouse kidney control) | [`GSM10122935`](sample/10x_Visium_HD/GSM10122935/) |
+| [GSM10122936](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM10122936) | mouse_48966-1_li | *Mus musculus* | mouse-lithium-polyuria ([GSE350835](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE350835)) | lithium-induced nephropathy (lithium-induced polyuria mouse kidney) | [`GSM10122936`](sample/10x_Visium_HD/GSM10122936/) |
+| [GSM10122937](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM10122937) | mouse_48966-2_li | *Mus musculus* | mouse-lithium-polyuria ([GSE350835](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE350835)) | lithium-induced nephropathy (lithium-induced polyuria mouse kidney) | [`GSM10122937`](sample/10x_Visium_HD/GSM10122937/) |
 
-### 4.4 10x Genomics Xenium in situ (23 Samples)
+### 4.4 10x Genomics Xenium in situ (56 Samples)
 
 | GSM Accession | Sample ID | Species | Study / Series | Disease Condition / Context | Pipeline Link |
 |---|---|---|---|---|---|
@@ -250,6 +282,39 @@ SpatialRenal/
 | [GSM8717007](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8717007) | 20210908-NMK92F | *Mus musculus* | kidney-aging-xenium ([GSE286051](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286051)) | normal (aging) (normal kidney, 92 weeks, female) | [`GSM8717007`](sample/10x_Xenium_in_situ/GSM8717007/) |
 | [GSM8717008](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8717008) | 20240208-NMK12F2 | *Mus musculus* | kidney-aging-xenium ([GSE286051](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286051)) | normal (aging) (normal kidney, 12 weeks, female) | [`GSM8717008`](sample/10x_Xenium_in_situ/GSM8717008/) |
 | [GSM8717009](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8717009) | 20240208-NMK12M2 | *Mus musculus* | kidney-aging-xenium ([GSE286051](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286051)) | normal (aging) (normal kidney, 12 weeks, male) | [`GSM8717009`](sample/10x_Xenium_in_situ/GSM8717009/) |
+| [GSM8720409](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720409) | kidney_xenium_1 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | reference/normal (Control human kidney biopsy) | [`GSM8720409`](sample/10x_Xenium_in_situ/GSM8720409/) |
+| [GSM8720410](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720410) | kidney_xenium_2 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | reference/normal (Control human kidney biopsy) | [`GSM8720410`](sample/10x_Xenium_in_situ/GSM8720410/) |
+| [GSM8720411](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720411) | kidney_xenium_3 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | diabetic kidney disease (DKD human kidney biopsy) | [`GSM8720411`](sample/10x_Xenium_in_situ/GSM8720411/) |
+| [GSM8720412](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720412) | kidney_xenium_4 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | diabetic kidney disease (DKD human kidney biopsy) | [`GSM8720412`](sample/10x_Xenium_in_situ/GSM8720412/) |
+| [GSM8720413](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720413) | kidney_xenium_5 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | diabetic kidney disease (DKD human kidney biopsy) | [`GSM8720413`](sample/10x_Xenium_in_situ/GSM8720413/) |
+| [GSM8720414](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720414) | kidney_xenium_6 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | reference/normal (Control human kidney biopsy) | [`GSM8720414`](sample/10x_Xenium_in_situ/GSM8720414/) |
+| [GSM8720415](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720415) | kidney_xenium_7 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | diabetic kidney disease (DKD human kidney biopsy) | [`GSM8720415`](sample/10x_Xenium_in_situ/GSM8720415/) |
+| [GSM8720416](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720416) | kidney_xenium_8 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | diabetic kidney disease (DKD human kidney biopsy) | [`GSM8720416`](sample/10x_Xenium_in_situ/GSM8720416/) |
+| [GSM8720417](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720417) | kidney_xenium_9 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | diabetic kidney disease (DKD human kidney biopsy) | [`GSM8720417`](sample/10x_Xenium_in_situ/GSM8720417/) |
+| [GSM8720418](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720418) | kidney_xenium_10 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | IgA nephropathy (IgAN human kidney biopsy) | [`GSM8720418`](sample/10x_Xenium_in_situ/GSM8720418/) |
+| [GSM8720419](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720419) | kidney_xenium_11 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | IgA nephropathy (IgAN human kidney biopsy) | [`GSM8720419`](sample/10x_Xenium_in_situ/GSM8720419/) |
+| [GSM8720420](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720420) | kidney_xenium_12 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | IgA nephropathy (IgAN human kidney biopsy) | [`GSM8720420`](sample/10x_Xenium_in_situ/GSM8720420/) |
+| [GSM8720421](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720421) | kidney_xenium_13 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | IgA nephropathy (IgAN human kidney biopsy) | [`GSM8720421`](sample/10x_Xenium_in_situ/GSM8720421/) |
+| [GSM8720422](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720422) | kidney_xenium_14 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | minimal change disease (MCD human kidney biopsy) | [`GSM8720422`](sample/10x_Xenium_in_situ/GSM8720422/) |
+| [GSM8720423](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720423) | kidney_xenium_15 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | minimal change disease (MCD human kidney biopsy) | [`GSM8720423`](sample/10x_Xenium_in_situ/GSM8720423/) |
+| [GSM8720424](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720424) | kidney_xenium_16 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | minimal change disease (MCD human kidney biopsy) | [`GSM8720424`](sample/10x_Xenium_in_situ/GSM8720424/) |
+| [GSM8720425](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720425) | kidney_xenium_17 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | minimal change disease (MCD human kidney biopsy) | [`GSM8720425`](sample/10x_Xenium_in_situ/GSM8720425/) |
+| [GSM8720426](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720426) | kidney_xenium_18 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | membranous nephropathy (MN human kidney biopsy) | [`GSM8720426`](sample/10x_Xenium_in_situ/GSM8720426/) |
+| [GSM8720427](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720427) | kidney_xenium_19 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | membranous nephropathy (MN human kidney biopsy) | [`GSM8720427`](sample/10x_Xenium_in_situ/GSM8720427/) |
+| [GSM8720428](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720428) | kidney_xenium_20 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | membranous nephropathy (MN human kidney biopsy) | [`GSM8720428`](sample/10x_Xenium_in_situ/GSM8720428/) |
+| [GSM8720429](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720429) | kidney_xenium_21 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | membranous nephropathy (MN human kidney biopsy) | [`GSM8720429`](sample/10x_Xenium_in_situ/GSM8720429/) |
+| [GSM8720430](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8720430) | kidney_xenium_22 | *Homo sapiens* | human-glomerular-xenium ([GSE286184](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE286184)) | membranous nephropathy (MN human kidney biopsy) | [`GSM8720430`](sample/10x_Xenium_in_situ/GSM8720430/) |
+| [GSM9844156](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9844156) | Region01 | *Homo sapiens* | human-AIN-xenium ([GSE336890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE336890)) | acute interstitial nephritis / acute tubular injury (human kidney biopsy Region01 (acute interstitial nephritis / acute tubular injury)) | [`GSM9844156`](sample/10x_Xenium_in_situ/GSM9844156/) |
+| [GSM9844157](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9844157) | Region02 | *Homo sapiens* | human-AIN-xenium ([GSE336890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE336890)) | acute interstitial nephritis (human kidney biopsy Region02 (acute interstitial nephritis)) | [`GSM9844157`](sample/10x_Xenium_in_situ/GSM9844157/) |
+| [GSM9844158](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9844158) | Region03 | *Homo sapiens* | human-AIN-xenium ([GSE336890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE336890)) | acute interstitial nephritis (human kidney biopsy Region03 (acute interstitial nephritis)) | [`GSM9844158`](sample/10x_Xenium_in_situ/GSM9844158/) |
+| [GSM9844159](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9844159) | Region04 | *Homo sapiens* | human-AIN-xenium ([GSE336890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE336890)) | acute tubular injury (human kidney biopsy Region04 (acute tubular injury)) | [`GSM9844159`](sample/10x_Xenium_in_situ/GSM9844159/) |
+| [GSM9844160](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9844160) | Region05 | *Homo sapiens* | human-AIN-xenium ([GSE336890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE336890)) | acute tubular injury (human kidney biopsy Region05 (acute tubular injury)) | [`GSM9844160`](sample/10x_Xenium_in_situ/GSM9844160/) |
+| [GSM9844161](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9844161) | Region09 | *Homo sapiens* | human-AIN-xenium ([GSE336890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE336890)) | acute interstitial nephritis (human kidney biopsy Region09 (acute interstitial nephritis)) | [`GSM9844161`](sample/10x_Xenium_in_situ/GSM9844161/) |
+| [GSM9844162](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9844162) | Region10 | *Homo sapiens* | human-AIN-xenium ([GSE336890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE336890)) | acute interstitial nephritis / acute tubular injury (human kidney biopsy Region10 (acute interstitial nephritis / acute tubular injury)) | [`GSM9844162`](sample/10x_Xenium_in_situ/GSM9844162/) |
+| [GSM9844163](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9844163) | Region14 | *Homo sapiens* | human-AIN-xenium ([GSE336890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE336890)) | reference/normal (human kidney biopsy Region14 (reference/normal)) | [`GSM9844163`](sample/10x_Xenium_in_situ/GSM9844163/) |
+| [GSM9844164](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9844164) | Region15 | *Homo sapiens* | human-AIN-xenium ([GSE336890](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE336890)) | acute interstitial nephritis / acute tubular injury (human kidney biopsy Region15 (acute interstitial nephritis / acute tubular injury)) | [`GSM9844164`](sample/10x_Xenium_in_situ/GSM9844164/) |
+| [GSM9792808](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9792808) | WT_Sample_A | *Mus musculus* | mouse-TAL-xenium ([GSE334656](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE334656)) | reference/normal (healthy adult mouse kidney WT_Sample_A) | [`GSM9792808`](sample/10x_Xenium_in_situ/GSM9792808/) |
+| [GSM10012817](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM10012817) | WT_Sample_B | *Mus musculus* | mouse-TAL-xenium ([GSE334656](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE334656)) | reference/normal (healthy adult mouse kidney WT_Sample_B) | [`GSM10012817`](sample/10x_Xenium_in_situ/GSM10012817/) |
 
 ### 4.5 NanoString CosMx SMI (3 Samples)
 
@@ -318,10 +383,10 @@ SpatialRenal/
 
 | Platform | Samples | Typical Raw Input Format | Output AnnData Structure |
 |---|---|---|---|
-| **10x Visium** | 39 | Space Ranger tarball / MTX + spatial files | `obs` (spots), `obsm['spatial']`, `X` (counts) |
+| **10x Visium** | 64 | Space Ranger tarball / MTX + spatial files | `obs` (spots), `obsm['spatial']`, `X` (counts) |
 | **10x Visium CytAssist** | 14 | Space Ranger tarball / MTX + images | `obs` (spots), `obsm['spatial']`, `X` (counts) |
-| **10x Visium HD** | 5 | 8µm bin matrices + tissue coordinates / cell segmentation | `obs` (bins/cells), `obsm['spatial']`, `X` (counts) |
-| **10x Xenium in situ** | 23 | Output bundle / transcripts.zarr / flat mtx + cells.csv / cell boundaries | `obs` (cells), `obsm['spatial']`, `X` (counts) |
+| **10x Visium HD** | 12 | 8µm bin matrices + tissue coordinates / cell segmentation | `obs` (bins/cells), `obsm['spatial']`, `X` (counts) |
+| **10x Xenium in situ** | 56 | Output bundle / transcripts.zarr / flat mtx + cells.csv / cell boundaries | `obs` (cells), `obsm['spatial']`, `X` (counts) |
 | **NanoString CosMx SMI** | 3 | AtoMx h5ad / raw transcripts & cell matrices | `obs` (cells), `obsm['spatial']`, `X` (counts) |
 | **NanoString GeoMx DSP** | 48 | DCC count files + PKC probe annotation | `obs` (ROIs/segments), `obsm['spatial']`, `X` (counts) |
 

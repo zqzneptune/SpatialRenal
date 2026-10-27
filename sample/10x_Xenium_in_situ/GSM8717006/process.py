@@ -110,7 +110,8 @@ FLAT_MTX = {
 
 def find_flat(raw_dir: Path, gsm: str, suffix: str) -> Optional[Path]:
     """Locate a flat per-GSM member by name suffix, e.g. ``<GSM>_<slide>.cells.csv.gz``."""
-    hits = sorted(p for p in raw_dir.glob(f"{gsm}_*{suffix}") if p.is_file())
+    clean = suffix.lstrip("._")
+    hits = sorted(p for p in raw_dir.iterdir() if p.is_file() and p.name.startswith(f"{gsm}_") and p.name.endswith(clean))
     return hits[0] if hits else None
 
 
